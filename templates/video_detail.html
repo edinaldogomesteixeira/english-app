@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto p-6">
+
+    <h1
+        class="
+            text-4xl
+            font-bold
+            mb-6
+        "
+    >
+        {{ video.title }}
+    </h1>
+
+    <!-- VIDEO -->
+
+    <video
+        id="video-player"
+        controls
+        class="
+            w-full
+            rounded-2xl
+            bg-black
+        "
+    >
+
+        <source
+            src="{{ video.video_file.url }}"
+            type="video/mp4"
+        >
+
+    </video>
+
+    <!-- SUBTITLES -->
+
+    <div
+        id="subtitle-box"
+        class="
+            mt-6
+            p-6
+            bg-white
+            rounded-2xl
+            shadow
+            text-2xl
+            min-h-[120px]
+        "
+    >
+
+        Waiting subtitles...
+
+    </div>
+
+</div>
+<script>
+
+    const video =
+        document.getElementById(
+            'video-player'
+        )
+
+    const subtitleBox =
+        document.getElementById(
+            'subtitle-box'
+        )
+
+    function convertToSeconds(time) {
+
+        const parts =
+            time.replace(',', '.')
+                .split(':')
+
+        return (
+
+            Number(parts[0]) * 3600 +
+
+            Number(parts[1]) * 60 +
+
+            Number(parts[2])
+
+        )
+
+    }
+
+    function parseSRT(data) {
+
+        const blocks =
+            data.trim()
+                .split(/\r?\n\r?\n/)
+
+        const parsed = []
+
+        blocks.forEach(block => {
+
+            const lines =
+                block.split(/\r?\n/)
+
+            if (lines.length >= 3) {
+
+                const timeLine =
+                    lines[1].trim()
+
+                const text =
+                    lines
+                        .slice(2)
+                        .join(' ')
+                        .trim()
+
+                const times =
+                    timeLine.split(
+                        ' --> '
+                    )
+
+                if (times.length === 2) {
+
+                    parsed.push({
+
+                        start:
+                            convertToSeconds(
+                                times[0]
+                            ),
+
+                        end:
+                            convertToSeconds(
+                                times[1]
+                            ),
+
+                        text: text
+
+                    })
+
+                }
+
+            }
+
+        })
+
+        return parsed
+
+    }
+
+    let subtitles = []
+
+    fetch(
+        "{{ video.subtitle_file.url }}"
+    )
+
+    .then(response => response.text())
+
+    .then(data => {
+
+        subtitles =
+            parseSRT(data)
+
+        console.log(subtitles)
+
+    })
+
+    function saveWord(word) {
+
+         const sentence =
+            subtitleBox.innerText
+                .trim()
+
+        fetch(
+
+            '/save-word/',
+
+            {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type':
+                        'application/x-www-form-urlencoded',
+
+                    'X-CSRFToken':
+                        '{{ csrf_token }}'
+
+                },
+
+                body:
+
+                    `word=${encodeURIComponent(word)}&sentence=${encodeURIComponent(sentence)}`
+
+            }
+
+        )
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            console.log(
+                'Salvo:',
+                word
+            )
+
+        })
+
+    }
+    function renderSubtitle(text) {
+
+        subtitleBox.innerHTML = ''
+
+        const words =
+            text.split(' ')
+
+        words.forEach(word => {
+
+            const span =
+                document.createElement('span')
+
+            span.textContent =
+                word + ' '
+
+            span.className =
+
+                'cursor-pointer hover:text-blue-500 transition'
+
+            span.onclick = () => {
+
+                saveWord(word)
+
+            }
+
+            subtitleBox.appendChild(span)
+
+        })
+
+    }
+
+    let lastSubtitle = ''
+    video.addEventListener(
+
+        'timeupdate',
+
+        () => {
+
+            const currentTime =
+                video.currentTime
+
+            let activeSubtitle =
+                null
+
+            subtitles.forEach(sub => {
+
+                if (
+
+                    currentTime >= sub.start &&
+
+                    currentTime <= sub.end
+
+                ) {
+
+                    activeSubtitle = sub
+
+                }
+
+            })
+
+            if (
+
+                activeSubtitle &&
+
+                activeSubtitle.text !==
+                lastSubtitle
+
+            ) {
+
+                lastSubtitle =
+                    activeSubtitle.text
+
+                renderSubtitle(
+                    activeSubtitle.text
+                )
+
+            }
+
+        }
+
+    )
+
+</script>
+{% endblock %}

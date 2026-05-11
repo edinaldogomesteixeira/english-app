@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>English App</title>
+</head>
+
+<body>
+
+    <h1>Upload de Vídeos</h1>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Enviar Vídeo
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>Vídeos Salvos</h2>
+
+    {% for video in videos %}
+
+        <h3>{{ video.title }}</h3>
+
+        <video width="700" controls>
+
+            <source src="{{ video.file.url }}" type="video/mp4">
+
+        </video>
+
+        <hr>
+
+    {% endfor %}
+
+</body>
+
+</html>

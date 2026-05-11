@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="flex min-h-screen bg-[#f5f5f5]">
+
+    <main class="flex-1 px-12 py-8">
+
+        {% include 'components/video_grid.html' %}
+
+    </main>
+
+</div>
+
+
+{% include 'components/import_modal.html' %}
+
+<script src="{% static 'js/upload_modal.js' %}"></script>
+
+<script>
+
+    async function checkVideoStatus() {
+
+        const cards = document.querySelectorAll(
+
+            '[data-video-id]'
+
+        )
+
+        for (const card of cards) {
+
+            const videoId =
+
+                card.dataset.videoId
+
+            try {
+
+                const response = await fetch(
+
+                    `/video-status/${videoId}/`
+
+                )
+
+                const data =
+                    await response.json()
+
+                if (
+
+                    data.status === 'ready' &&
+
+                    card.dataset.status ===
+                    'processing'
+
+                ) {
+
+                    location.reload()
+
+                }
+
+            } catch (error) {
+
+                console.log(error)
+
+            }
+
+        }
+
+    }
+
+    setInterval(
+
+        checkVideoStatus,
+
+        3000
+
+    )
+
+</script>
+
+{% endblock %}

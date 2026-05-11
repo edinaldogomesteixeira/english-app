@@ -1,0 +1,206 @@
+{% load static %}
+<a
+    href="{% url 'video_detail' video.id %}"
+    class="group h-full block"
+>
+
+    <div
+        class="
+            relative
+            bg-white
+            rounded-x
+            overflow-hidden
+            border
+            border-gray-200
+            shadow-sm
+            hover:shadow-md
+            hover:-translate-y-1
+            transition-all
+            duration-200
+            h-full
+            flex
+            flex-col
+        "
+    >
+
+        <!-- THUMBNAIL -->
+
+        <div
+            class="group"
+            id="video-card-{{ video.id }}"
+            data-video-id="{{ video.id }}"
+            data-status="{{ video.status }}"
+        >
+            <form
+                method="POST"
+                action="{% url 'delete_video' video.id %}"
+                class="absolute top-3 right-3 z-20"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    onclick="return confirm('Delete video?')"
+                    class="
+                        absolute
+                        top-3
+                        right-3
+                        w-11
+                        h-11
+                        rounded-full
+                        bg-red-500
+                        hover:bg-red-600
+                        text-white
+                        flex
+                        items-center
+                        justify-center
+                        shadow-lg
+                        transition-all
+                        duration-200
+                        hover:scale-110
+                        z-20
+                    "
+                >
+
+                   X
+
+                </button>
+
+            </form>
+
+            {% if video.source_type == 'youtube' %}
+
+                <img
+                    id="thumbnail-{{ video.id }}"
+                    src="https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg"
+                    alt="{{ video.title }}"
+                    class="
+                        w-full
+                        aspect-video
+                        object-cover
+                    "
+                >
+
+            {% elif video.thumbnail %}
+            
+                <img
+
+                    id="thumbnail-{{ video.id }}"
+
+                    src="{% if video.thumbnail %}{{ video.thumbnail.url }}{% else %}/static/images/placeholder.jpg{% endif %}"
+
+                    class="
+                        w-full
+                        h-52
+                        object-cover
+                    "
+
+                >
+
+            {% else %}
+
+                <div
+                    class="
+                        w-full
+                        aspect-video
+                        bg-gray-300
+                    "
+                ></div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- CONTENT -->
+
+        <div
+            class="
+                p-4
+                flex
+                flex-col
+                flex-1
+            "
+        >
+
+            <!-- TITLE -->
+
+            <h3
+                class="
+                    text-base
+                    font-semibold
+                    text-gray-900
+                    line-clamp-2
+                    min-h-[52px]
+                    leading-6
+                    group-hover:text-blue-500
+                    transition-colors
+                "
+            >
+                {{ video.title }}
+            </h3>
+
+            <!-- META -->
+
+            <div
+                class="
+                    mt-auto
+                    pt-4
+                    flex
+                    items-center
+                    justify-between
+                    text-sm
+                    text-gray-500
+                "
+            >
+                <span id="duration-{{ video.id }}">
+                    ⏱ {{ video.duration }}
+                </span>
+
+                <span id="words-{{ video.id }}">
+                    📚 {{ video.word_count }} unique
+                </span>
+
+                {% if video.language %}
+
+                    <span
+                        class="
+                            px-2
+                            py-1
+                            rounded-md
+                            bg-gray-100
+                            text-xs
+                            font-medium
+                        "
+                    >
+                        {{ video.language }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+            <div
+
+                id="status-{{ video.id }}"
+
+                class="
+                    text-sm
+                    text-yellow-500
+                    mt-2
+                "
+
+            >
+
+                {% if video.status == 'processing' %}
+
+                    ⏳ Processing...
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</a>

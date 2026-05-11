@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+{% include 'components/pagination.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/vocabulary.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page">
+
+    <div class="page-container">
+
+        <!-- TOP NAVIGATION -->
+
+        <!-- FILTER BAR -->
+
+        <section class="filter-bar">
+
+            <!-- TABS -->
+
+            <div class="filter-tabs">
+
+                <button type="button" class="tab-btn active">
+                    Tudo
+                </button>
+
+                <button type="button" class="tab-btn">
+                    Frases
+                </button>
+
+                <button type="button" class="tab-btn tab-large">
+                    A ser revisado(SRS)
+                </button>
+
+            </div>
+
+            <!-- ACTIONS -->
+
+            <div class="filter-actions">
+
+                <button type="button" class="action-btn">
+                    🔍 Buscar
+                </button>
+
+                <button type="button" class="action-btn">
+                    ⚙ Filtros
+                </button>
+
+                <button type="button" class="action-btn">
+                    Mais Ações ⌄
+                </button>
+                  {% include 'components/pagination.html' %}
+            </div>
+
+            </div>
+
+        </section>
+
+        <!-- TABLE -->
+
+        <main class="table-wrapper">
+
+            <div class="table-container">
+
+                <!-- HEADER -->
+                <table class="vocab-table">
+                    <caption class="sr-only">
+                        Lista de vocabulário salvo
+                    </caption>
+
+                    <thead>
+
+                        <tr>
+                            <th class="checkbox-header">
+                                <input
+                                    type="checkbox"
+                                    aria-label="Selecionar todos"
+                                >
+                            </th>
+
+                            <th scope="col" class="term-header">
+                                TERMO
+                            </th>
+
+                            <th scope="col" class="ipa-column">
+                                IPA
+                            </th>
+
+                            <th scope="col" class="context-column">
+                                TEXTO DE ORIGEM
+                            </th>
+
+                            <th scope="col" class="status-column">
+                                STATUS
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>                   
+              
+
+                <!-- ROWS -->
+
+                        {% for word in words %}
+
+                        <tr class="vocab-row" data-word-id="{{ word.id }}">
+
+                            <!-- CHECKBOX -->
+                            <td class="checkbox-cell">
+                                <input
+                                    type="checkbox"
+                                    aria-label="Selecionar palavra"
+                                >
+                            </td>
+
+                            <!-- TERMO -->
+
+                            <td class="word-column">
+                                    <!-- CONTENT -->
+                                <div class="word-inline">
+
+                                    <span class="word-title">
+                                        {{ word.word }}
+                                    </span>
+
+                                    <div class="word-badges">
+
+                                        {% if word.word_class %}
+                                            <span class="badge badge-gray">
+                                                {{ word.word_class }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- IPA -->
+
+                            <td class="ipa-column">
+
+                                <div class="ipa-text">
+                                    {{ word.ipa|default:"-" }}
+                                </div>
+
+                            </td>
+
+                            <!-- CONTEXT -->
+
+                            <td class="context-column">
+
+                                <div class="context-text">
+                                    “{{ word.original_sentence }}”
+                                </div>
+
+                            </td>
+
+                            <!-- STATUS -->
+
+                            <td class="status-column">
+
+                                <div class="status-actions">
+                                    <form
+                                        method="POST"
+                                        action="{% url 'delete_word' word.id %}"
+                                        class="delete-form"
+                                    >
+                                        {% csrf_token %}
+                                        <input
+                                            type="hidden"
+                                            name="page"
+                                            value="{{ words.number }}"
+                                        >
+                                        <button
+                                            type="submit"
+                                            class="icon-btn"
+                                            aria-label="Excluir {{ word.word }}"
+                                        >
+                                            🗑
+                                        </button>
+
+                                    </form>
+
+                                    <button type="button" class="srs-btn srs-1">
+                                        1
+                                    </button>
+
+                                    <button type="button" class="srs-btn srs-2">
+                                        2
+                                    </button>
+
+                                    <button type="button" class="srs-btn srs-3">
+                                        3
+                                    </button>
+
+                                    <button type="button" class="srs-btn srs-4">
+                                        4
+                                    </button>
+
+                                    <button type="button" class="srs-btn srs-done">
+                                        ✓
+                                    </button>
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="4">
+
+                                <div class="empty-state">
+
+                                    <div class="empty-icon">
+                                        📚
+                                    </div>
+
+                                    <h3 class="empty-title">
+                                        Nenhum vocabulário salvo
+                                    </h3>
+
+                                    <p class="empty-description">
+                                        As palavras adicionadas aparecerão aqui.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+                    
+                    </tbody>
+                
+                </table>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,315 @@
+<!-- Import Modal -->
+
+<div
+    id="import-modal"
+    class="
+        fixed
+        inset-0
+        bg-black/40
+        hidden
+        items-center
+        justify-center
+        z-50
+        p-4
+    "
+>
+
+    <!-- MODAL -->
+
+    <div
+        class="
+            bg-white
+            w-full
+            max-w-xl
+            rounded-3xl
+            p-8
+            relative
+            shadow-2xl
+            max-h-[90vh]
+            overflow-y-auto
+        "
+    >
+
+        <!-- CLOSE -->
+
+        <button
+            id="close-import-modal"
+            type="button"
+            class="
+                absolute
+                top-5
+                right-5
+                text-3xl
+                text-gray-400
+                hover:text-black
+                transition
+            "
+        >
+            ×
+        </button>
+
+        <!-- TITLE -->
+
+        <h2
+            class="
+                text-2xl
+                font-bold
+                text-gray-900
+                mb-6
+            "
+        >
+            Importação de vídeos
+        </h2>
+
+        <!-- FORM -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            action="{% url 'upload_video' %}"
+            class="space-y-6"
+        >
+
+            {% csrf_token %}
+
+            <!-- YOUTUBE URL -->
+
+            <div class="space-y-2">
+
+                <label
+                    class="
+                        text-sm
+                        font-medium
+                        text-gray-700
+                    "
+                >
+                    URL YouTube
+                </label>
+
+                <input
+                    type="url"
+                    name="youtube_url"
+                    placeholder="https://youtube.com/watch?v=..."
+                    class="
+                        w-full
+                        rounded-2xl
+                        border
+                        border-gray-300
+                        px-4
+                        py-3
+                        outline-none
+                        focus:border-blue-500
+                    "
+                >
+
+            </div>
+
+            <!-- DROP AREA -->
+
+            <div
+                id="drop-area"
+                class="
+                    border-2
+                    border-dashed
+                    border-blue-200
+                    bg-blue-50
+                    rounded-3xl
+                    p-10
+                    text-center
+                    hover:bg-blue-100
+                    transition
+                    cursor-pointer
+                "
+            >
+
+                <h3
+                    class="
+                        text-xl
+                        font-semibold
+                        text-gray-700
+                    "
+                >
+                    Arraste vídeos aqui
+                </h3>
+
+                <p
+                    class="
+                        text-gray-500
+                        mt-3
+                        text-sm
+                    "
+                >
+                    ou clique para selecionar arquivos
+                </p>
+
+                <p
+                    id="selected-file"
+                    class="
+                        text-blue-500
+                        mt-5
+                        text-sm
+                        font-semibold
+                    "
+                >
+                    Nenhum arquivo selecionado
+                </p>
+
+                <input
+                    type="file"
+                    name="video_file"
+                    id="file-input"
+                    class="hidden"
+                    accept="video/*"
+                >
+
+            </div>
+
+            <!-- GRID -->
+
+            <div
+                class="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-4
+                "
+            >
+
+                <!-- TITLE -->
+
+                <input
+                    type="text"
+                    name="title"
+                    id="video-title"
+                    placeholder="Video title"
+                    class="
+                        w-full
+                        p-3
+                        rounded-2xl
+                        border
+                        border-gray-300
+                        outline-none
+                        focus:border-blue-500
+                    "
+                >
+
+                <!-- LEVEL -->
+
+                <select
+                    name="level"
+                    class="
+                        w-full
+                        p-3
+                        rounded-2xl
+                        border
+                        border-gray-300
+                        bg-white
+                        outline-none
+                        focus:border-blue-500
+                    "
+                >
+
+                    <option value="Beginner">
+                        Beginner
+                    </option>
+
+                    <option value="Intermediate">
+                        Intermediate
+                    </option>
+
+                    <option value="Advanced">
+                        Advanced
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+
+            <textarea
+                name="description"
+                placeholder="Description"
+                class="
+                    w-full
+                    p-3
+                    rounded-2xl
+                    border
+                    border-gray-300
+                    h-24
+                    outline-none
+                    focus:border-blue-500
+                "
+            ></textarea>
+
+            <!-- DURATION -->
+
+            <input
+                type="text"
+                name="duration"
+                id="video-duration"
+                placeholder="Duration"
+                class="
+                    w-full
+                    p-3
+                    rounded-2xl
+                    border
+                    border-gray-300
+                    outline-none
+                    focus:border-blue-500
+                "
+            >
+
+            <!-- BUTTONS -->
+
+            <div
+                class="
+                    flex
+                    justify-end
+                    gap-4
+                    pt-4
+                "
+            >
+
+                <!-- CANCEL -->
+
+                <button
+                    type="button"
+                    id="cancel-import"
+                    class="
+                        px-6
+                        py-3
+                        rounded-2xl
+                        bg-gray-100
+                        hover:bg-gray-200
+                        transition
+                    "
+                >
+                    Cancelar
+                </button>
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="
+                        bg-green-500
+                        hover:bg-green-600
+                        text-white
+                        px-8
+                        py-3
+                        rounded-2xl
+                        transition
+                        font-medium
+                    "
+                >
+                    Importar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

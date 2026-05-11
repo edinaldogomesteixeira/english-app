@@ -1,0 +1,157 @@
+<div class="space-y-8">
+
+    <!-- HEADER -->
+
+    <div
+        class="
+            flex
+            items-center
+            justify-between
+            gap-4
+            flex-wrap
+        "
+    >
+
+        <div>
+
+            <h1
+                class="
+                    text-3xl
+                    font-bold
+                    text-gray-900
+                "
+            >
+                Biblioteca
+            </h1>
+
+            <p
+                class="
+                    mt-2
+                    text-gray-500
+                "
+            >
+                Seus vídeos importados para estudo.
+            </p>
+
+        </div>
+
+        <!-- ACTIONS -->
+
+        <div
+            class="
+                flex
+                items-center
+                gap-3
+                flex-wrap
+            "
+        >
+
+            <button
+                id="open-import-modal"
+                class="
+                    h-11
+                    px-5
+                    rounded-xl
+                    bg-blue-600
+                    hover:bg-blue-700
+                    text-white
+                    font-medium
+                    transition-colors
+                "
+            >
+                + Importar vídeo
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- GRID -->
+
+    {% if videos %}
+
+        <div
+            class="
+                grid
+                grid-cols-1
+                sm:grid-cols-2
+                lg:grid-cols-3
+                2xl:grid-cols-4
+                gap-6
+                items-stretch
+            "
+        >
+
+            {% for video in videos %}
+
+                {% include 'components/video_card.html' %}
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- EMPTY STATE -->
+
+        <div
+            class="
+                bg-white
+                border
+                border-gray-200
+                rounded-2xl
+                py-24
+                px-8
+                text-center
+            "
+        >
+
+            <div class="text-6xl mb-6">
+                📚
+            </div>
+
+            <h2
+                class="
+                    text-2xl
+                    font-bold
+                    text-gray-900
+                "
+            >
+                Nenhum vídeo importado
+            </h2>
+
+            <p
+                class="
+                    mt-3
+                    text-gray-500
+                    max-w-md
+                    mx-auto
+                "
+            >
+                Importe vídeos do YouTube para começar
+                a estudar inglês com transcrição,
+                tradução e vocabulário.
+            </p>
+
+            <button
+                id="open-import-modal-empty"
+                class="
+                    mt-8
+                    h-11
+                    px-6
+                    rounded-xl
+                    bg-blue-600
+                    hover:bg-blue-700
+                    text-white
+                    font-medium
+                    transition-colors
+                "
+            >
+                Importar primeiro vídeo
+            </button>
+
+        </div>
+
+    {% endif %}
+
+</div>

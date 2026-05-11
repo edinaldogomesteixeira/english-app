@@ -1,0 +1,33 @@
+.subtitle-word {
+
+    cursor: pointer;
+
+    padding: 2px 4px;
+
+    border-radius: 4px;
+
+    transition: 0.15s;
+
+}
+
+.subtitle-word:hover {
+
+    text-decoration: underline;
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+}
+
+#subtitle-box {
+
+    font-size: 1.25rem;
+
+    font-weight: 500;
+
+    line-height: 1.8;
+
+    color: #111827;
+
+}

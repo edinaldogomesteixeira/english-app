@@ -1,0 +1,88 @@
+<div class="table-pagination">
+
+    {% if words.has_previous %}
+
+        <a
+            href="?page={{ words.previous_page_number }}"
+            class="pagination-btn"
+        >
+            ‹
+        </a>
+
+    {% endif %}
+
+    {% if words.number > 3 %}
+
+        <a
+            href="?page=1"
+            class="pagination-number"
+        >
+            1
+        </a>
+
+    {% endif %}
+
+    {% if words.number > 4 %}
+
+        <span class="pagination-dots">
+            ...
+        </span>
+
+    {% endif %}
+
+    {% for num in words.paginator.page_range %}
+
+        {% if num >= words.number|add:'-2' and num <= words.number|add:'2' %}
+
+            {% if words.number == num %}
+
+                <span class="pagination-current">
+                    {{ num }}
+                </span>
+
+            {% else %}
+
+                <a
+                    href="?page={{ num }}"
+                    class="pagination-number"
+                >
+                    {{ num }}
+                </a>
+
+            {% endif %}
+
+        {% endif %}
+
+    {% endfor %}
+
+    {% if words.number < words.paginator.num_pages|add:'-3' %}
+
+        <span class="pagination-dots">
+            ...
+        </span>
+
+    {% endif %}
+
+    {% if words.number < words.paginator.num_pages|add:'-2' %}
+
+        <a
+            href="?page={{ words.paginator.num_pages }}"
+            class="pagination-number"
+        >
+            {{ words.paginator.num_pages }}
+        </a>
+
+    {% endif %}
+
+    {% if words.has_next %}
+
+        <a
+            href="?page={{ words.next_page_number }}"
+            class="pagination-btn"
+        >
+            ›
+        </a>
+
+    {% endif %}
+
+</div>
